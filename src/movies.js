@@ -8,11 +8,10 @@
 // _Bonus_: It seems some of the directors had directed multiple movies so they will pop up multiple times in the array of directors.
 // How could you "clean" a bit this array and make it unified (without duplicates)?
 function getAllDirectors(arr) {
-  const allDirectors = arr.map(function (obj) {
+  return arr.map(function (obj) {
     return obj.director;
   });
-  return allDirectors;
-};
+}
 
 // ###############################################################################
 // ############################# DONE!!! #########################################
@@ -20,11 +19,10 @@ function getAllDirectors(arr) {
 
 // Iteration 2: Steven Spielberg. The best? - How many drama movies did STEVEN SPIELBERG direct?
 function howManyMovies(arr) {
-  const stevenSpielberg = arr.filter(function (obj) {
+  return arr.filter(function (obj) {
     return obj.director === 'Steven Spielberg' && obj.genre.includes('Drama');
-  });
-  return stevenSpielberg.length;
-};
+  }).length;
+}
 
 // ###############################################################################
 // ############################# DONE!!! #########################################
@@ -34,21 +32,24 @@ function scoresAverage(arr) {
   if (arr.length === 0) {
     return 0;
   } else {
-    const totalSum = arr.map(function (obj) {
-      if (typeof obj.score === 'undefined')
-        return {
-          title: obj.title,
-          year: obj.year,
-          director: obj.director,
-          genre: obj.genre,
-          score: ''
-        };
-      return obj;
-    }).reduce(function (acc, value) {
-      return acc + value.score;
-    }, 0);
-    return +(totalSum / arr.length).toFixed(2); 
-}};
+    const totalSum = arr
+      .map(function (obj) {
+        if (typeof obj.score === 'undefined')
+          return {
+            title: obj.title,
+            year: obj.year,
+            director: obj.director,
+            genre: obj.genre,
+            score: ''
+          };
+        return obj;
+      })
+      .reduce(function (acc, value) {
+        return acc + value.score;
+      }, 0);
+    return +(totalSum / arr.length).toFixed(2);
+  }
+}
 
 // ###############################################################################
 // ############################# DONE!!! #########################################
@@ -60,8 +61,8 @@ function dramaMoviesScore(arr) {
     return obj.genre.includes('Drama');
   });
   if (drama.length === 0) return 0;
-    return scoresAverage(drama);
-};
+  return scoresAverage(drama);
+}
 
 // ###############################################################################
 // ############################# DONE!!! #########################################
@@ -69,9 +70,10 @@ function dramaMoviesScore(arr) {
 // Iteration 5: Ordering by year - Order by year, ascending (in growing order)
 function orderByYear(arr) {
   const orderByYear = arr
-      .map(obj => obj)
-      .sort(function (a, b) { return a.year - b.year || a.title.localeCompare(b.title);
-  });
+    .map((obj) => obj)
+    .sort(function (a, b) {
+      return a.year - b.year || a.title.localeCompare(b.title);
+    });
   return orderByYear;
 }
 
@@ -82,10 +84,12 @@ function orderByYear(arr) {
 // Iteration 6: Alphabetic Order - Order by title and print the first 20 titles
 function orderAlphabetically(arr) {
   const alphabeticOrder = orderByYear(arr)
-          .sort(function (a, b) { return a.title.localeCompare(b.title);})
-          .map(function (obj) {
-          return obj.title;
-  });
+    .sort(function (a, b) {
+      return a.title.localeCompare(b.title);
+    })
+    .map(function (obj) {
+      return obj.title;
+    });
   return alphabeticOrder.slice(0, 20);
 }
 
@@ -95,8 +99,15 @@ function orderAlphabetically(arr) {
 // BONUS - Iteration 7: Time Format - Turn duration of the movies from hours to minutes
 function turnHoursToMinutes(arr) {
   const newArr = arr.map(function (obj) {
-    const hoursToMinutes = Number(obj.duration.slice(0,obj.duration.indexOf('h')) * 60)
-    const minutes = Number(obj.duration.slice(obj.duration.indexOf('h') +1, obj.duration.indexOf('min')))
+    const hoursToMinutes = Number(
+      obj.duration.slice(0, obj.duration.indexOf('h')) * 60
+    );
+    const minutes = Number(
+      obj.duration.slice(
+        obj.duration.indexOf('h') + 1,
+        obj.duration.indexOf('min')
+      )
+    );
     return {
       title: obj.title,
       year: obj.year,
@@ -104,28 +115,36 @@ function turnHoursToMinutes(arr) {
       duration: Number(hoursToMinutes) + Number(minutes),
       genre: obj.genre,
       score: obj.score
-    }; 
-   })
-  return newArr
+    };
+  });
+  return newArr;
 }
 
+// ###############################################################################
+// ############################# DONE!!! #########################################
+// ###############################################################################
 // BONUS - Iteration 8: Best yearly score average - Best yearly score average
 function bestYearAvg(arr) {
-  if (arr.length === 0) {
-    return null;
-  }
-  if (arr.length === 1) {
-    return `The best year was ${arr[0].year} with an average score of ${arr[0].score}`;
-  }
-  const newArr = arr.map(function (obj) {
-    return [obj.year, obj.score]
-  })
-  let years =[]
-  for (str of newArr)
-  if (!years.includes(str[0])) {
-    years.push(`${str[0]}, ${0}`)
-  } 
-  return newArr2
+  if (!arr.length) return null;
+  const best = arr.reduce(
+    function (best, movie) {
+      const average = scoresAverage(
+        arr.filter(function (obj) {
+          return obj.year === movie.year;
+        })
+      );
+      if (
+        average > best.rate ||
+        (average === best.rate && movie.year < best.year)
+      ) {
+        best.year = movie.year;
+        best.rate = average;
+      }
+      return best;
+    },
+    { year: null, rate: null }
+  );
+  return `The best year was ${best.year} with an average score of ${best.rate}`;
 }
 
 // The following is required to make unit tests work.
