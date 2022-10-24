@@ -36,10 +36,6 @@ function scoresAverage(arr) {
       .map(function (obj) {
         if (typeof obj.score === 'undefined')
           return {
-            title: obj.title,
-            year: obj.year,
-            director: obj.director,
-            genre: obj.genre,
             score: ''
           };
         return obj;
@@ -99,24 +95,19 @@ function orderAlphabetically(arr) {
 // BONUS - Iteration 7: Time Format - Turn duration of the movies from hours to minutes
 function turnHoursToMinutes(arr) {
   const newArr = arr.map(function (obj) {
-    const hoursToMinutes = Number(
-      obj.duration.slice(0, obj.duration.indexOf('h')) * 60
-    );
-    const minutes = Number(
-      obj.duration.slice(
-        obj.duration.indexOf('h') + 1,
-        obj.duration.indexOf('min')
-      )
-    );
     return {
-      title: obj.title,
-      year: obj.year,
-      director: obj.director,
-      duration: Number(hoursToMinutes) + Number(minutes),
-      genre: obj.genre,
-      score: obj.score
+      duration:
+        Number(obj.duration.slice(0, obj.duration.indexOf('h')) * 60) +
+        Number(
+          obj.duration.slice(
+            obj.duration.indexOf('h') + 1,
+            obj.duration.indexOf('min')
+          )
+        )
     };
+    // });
   });
+  console.log(newArr);
   return newArr;
 }
 
