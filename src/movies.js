@@ -32,17 +32,10 @@ function scoresAverage(arr) {
   if (arr.length === 0) {
     return 0;
   } else {
-    const totalSum = arr
-      .map(function (obj) {
-        if (typeof obj.score === 'undefined')
-          return {
-            score: ''
-          };
-        return obj;
-      })
-      .reduce(function (acc, value) {
-        return acc + value.score;
-      }, 0);
+    const totalSum = arr.reduce(function (acc, value) {
+      if (!value.score) return acc;
+      return acc + value.score;
+    }, 0);
     return +(totalSum / arr.length).toFixed(2);
   }
 }
